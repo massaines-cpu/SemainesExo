@@ -20,6 +20,7 @@ MODELES_LLM = {
     "O": "gpt-4o"
 }
 
+
 class DonneesJeu(BaseModel):
     plateau: List[str]
     joueur: str  # ce sera soit X ou O
@@ -31,20 +32,37 @@ def jouer_tour(donnees: DonneesJeu):  # récuperer la grille envoyée par le fro
     plateau_formate = ", ".join([f"Case {i}: {v if v != ' ' else 'vide'}" for i, v in enumerate(donnees.plateau)])
     nom_LLM = MODELES_LLM[donnees.joueur]
     # Créer un prompt (Règles/contraintes)
-    instructions = f"""Tu es CHAMPION du monde du jeu Tic-Tac-Toe !!!! Ton seul et unique but est de gagner.
-    1. Aligner 3 fois ton symbole ({donnees.joueur}) en ligne, colonne ou diagonale.
-    2. Tu dois poser ton symbole dans une case vide.
-    3. Bloque l'adversaire s'il est sur le point de gagner.
-    4. INTERDICTION de jouer sur une case déjà occupée.
+    instructions = f"""
+    Tu es une IA experte en jeux de stratégie combinatoire.
+    Tu joues à un morpion de taille 10x10 (100 cases, indexées de 0 à 99).
+    Le but est d’aligner exactement 5 symboles identiques ({donnees.joueur})
+    horizontalement, verticalement ou en diagonale.
 
-    RÈGLE CRITIQUE : Réponds UNIQUEMENT par le chiffre de la case (0, 1, 2, 3, 4, 5, 6, 7 ou 8). Aucun autre texte."""
+    RÈGLES :
+    - Tu dois jouer uniquement sur une case vide.
+    - Tu dois toujours analyser l’état actuel du plateau.
+    - Tu dois prendre en compte les coups précédents de ton adversaire.
+    - Tu joues contre un adversaire intelligent qui cherche aussi à gagner.
+
+    PRIORITÉS (dans cet ordre) :
+    1. Si tu peux gagner en un coup, joue ce coup.
+    2. Sinon, si l’adversaire peut gagner au prochain coup, bloque-le.
+    3. Sinon, prolonge ton meilleur alignement existant (3 ou 4 symboles).
+    4. Sinon, empêche l’adversaire de construire un alignement.
+    5. Sinon, joue un coup stratégique proche du centre ou d’autres symboles.
+
+    CONTRAINTES STRICTES :
+    - Réponds UNIQUEMENT par un nombre entier entre 0 et 99.
+    - Ce nombre doit correspondre à une case vide.
+    - Aucun texte, aucune explication, aucun mot.
+    """
 
     situation = f"Le grille actuelle est : {plateau_formate}. Tu es le joueur {donnees.joueur}."
     prompt = instructions + situation
 
     try:
         if donnees.joueur == "O":
-            #azure
+            # azure
             reponse = client_azure.chat.completions.create(
                 model="gpt-4o",
                 messages=[{"role": "user", "content": prompt}]
@@ -53,7 +71,7 @@ def jouer_tour(donnees: DonneesJeu):  # récuperer la grille envoyée par le fro
         else:
             # ollama
             reponse = ollama.chat(
-                model="ministral-3:3b",
+                model=MODELES_LLM[donnees.joueur],
                 messages=[{'role': 'user', 'content': prompt}]
             )
             contenu = reponse['message']['content']
@@ -61,10 +79,15 @@ def jouer_tour(donnees: DonneesJeu):  # récuperer la grille envoyée par le fro
         # tri dans ce quils ont ecrit
         # on garde que la reponse en chiffre
         # joueur 1 envoie un numero de case à api
-        chiffres = re.findall(r'\d', contenu) #cherche dans tous les contenu, r'/d' pour chercher que les chiffres
-        #"peu importe ce que l'IA a ecrit prend juste le chiffre"
-        if chiffres:
-            coup_choisi = int(chiffres[0])  # si on trouve un chiffre on prend le premier [0], nombre entier pour l'utiliser
+        match = re.search(r'\b([0-9]{1,2})\b',
+                          contenu)  # cherche dans tous les contenu, r'/d' pour chercher que les chiffres
+        # "peu importe ce que l'IA a ecrit prend juste le chiffre"
+        if match:
+            coup_choisi = int(match.group(1))
+            if not (0 <= coup_choisi < 100):
+                coup_choisi = donnees.plateau.index(" ")
+            if donnees.plateau[coup_choisi] != " ":
+                coup_choisi = donnees.plateau.indx(" ")
             return {"coup": coup_choisi}  # on renvoit le coup en JSON
         else:
             # si LLM a pas donné de chiffre, on prend la 1ère case vide pcq sinon bordel

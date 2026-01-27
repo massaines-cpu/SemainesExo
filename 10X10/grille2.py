@@ -6,7 +6,7 @@ import random
 #Créer grille vide
 #en gros "si la grille a pas ete cree alors elle sera comme ca..."
 if 'grille' not in st.session_state:
-    st.session_state.grille = [" "] * 9
+    st.session_state.grille = [" "] * 100
 
     #Créer less deux joueurs (llm1 :X, llm2 : O)
 if 'premier_joueur' not in st.session_state:
@@ -26,10 +26,10 @@ with col_joueur2:
 left, center, right = st.columns([1, 2, 1])
 
 with center:
-    for ligne in range(3):
-        cols = st.columns(3)
-        for case in range(3):
-            index = ligne * 3 + case
+    for ligne in range(10):
+        cols = st.columns(10)
+        for case in range(10):
+            index = ligne * 10 + case
             label = st.session_state.grille[index] #on cherche pour voir si cest un X ou O
             #use_container_width pour que les boutons s'alignent bien
             cols[case].button(label, key=f"case_{index}", use_container_width=True)#key pour chaque bouton car besoin d'un nombre unique
@@ -40,23 +40,41 @@ st.write("---")
 def verifier_fin():
     #detecter si 3 symboles identiques se suivent. if oui partie gagnée
     grille = st.session_state.grille
-        #  combinaisons gagnantes (lignes, colonnes, diagonales)
-    victoires = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],  # victoirhorizontales
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],  # vicverticales
-            [0, 4, 8], [2, 4, 6]  # vicdiagonales
-        ]
+    taille = 10
+    alignement_requis = 5
+    #pour horizontal
+    for ligne in range(taille):
+        for colonne in range(taille - alignement_requis + 1):
+            case_actuelle = ligne * taille + colonne
+            ordre_gagnant = [grille[case_actuelle + i] for i in range(alignement_requis)]
+            if all(cases == ordre_gagnant[0] and cases != " " for cases in ordre_gagnant):
+                return f"Le joueur {ordre_gagnant[0]} a gagné en horizontal !"
+    #pour vertical
+    for ligne in range(taille - alignement_requis + 1):
+        for colonne in range(taille):
+            case_actuelle = ligne * taille + colonne
+            ordre_gagnant = [grille[case_actuelle + (i * taille)] for i in range(alignement_requis)]
+            if all(cases == ordre_gagnant[0] and cases != " " for cases in ordre_gagnant):
+                return f"Le joueur {ordre_gagnant[0]} a gagné en vertical !"
+    #diagonal droite
+    for ligne in range(taille - alignement_requis + 1):
+        for colonne in range(taille - alignement_requis + 1):
+            case_actuelle = ligne * taille + colonne
+            ordre_gagnant = [grille[case_actuelle + i * (taille + 1)] for i in range(alignement_requis)]
+            if all(cases == ordre_gagnant[0] and cases != " " for cases in ordre_gagnant):
+                return f"Le joueur {ordre_gagnant[0]} a gagné en diagonal !"
 
-    for victoire in victoires:
-        if grille[victoire[0]] == grille[victoire[1]] == grille[victoire[2]] != " ":
-            #définir un message si victoire.
-            return f"Le joueur qui joue {grille[victoire[0]]} a tué son adversaire !"
+    #diagonal gauche
+    for ligne in range(alignement_requis - 1, taille):
+        for colonne in range(taille - alignement_requis + 1):
+            case_actuelle = colonne * taille + ligne
+            ordre_gagnant = [grille[case_actuelle + i * (taille - 1)] for i in range(alignement_requis)]
+            if all(cases == ordre_gagnant[0] and cases != " " for cases in ordre_gagnant):
+                return f"Le joueur {ordre_gagnant[0]} a gagné en diagonal !"
+
 #sinon continuer si reste case vide.
 #si grille complète sans gagnant, partie nulle. Message vous pouvez re-tenter votre chance.
-    if " " not in grille:
-        return "Match nul, retentez votre chance bande de looser "
 
-    return None
 #======================ON ENVOIE LA GRILLE A CHAQUE FOIS+++++++++++++++++
 def envoyer_grille():
     url = "http://127.0.0.1:8000/play"

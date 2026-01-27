@@ -26,18 +26,20 @@ class DonneesJeu(BaseModel):
 
 
 @app.post("/play")
-def jouer_tour(donnees: DonneesJeu):  # récuperer la grille envoyée par le front
+def jouer_tour(donnees: DonneesJeu):# récuperer la grille envoyée par le front
+
+
     # LLM comprend pas quand espace vide alorson lui dit le mot vide
     plateau_formate = ", ".join([f"Case {i}: {v if v != ' ' else 'vide'}" for i, v in enumerate(donnees.plateau)])
     nom_LLM = MODELES_LLM[donnees.joueur]
     # Créer un prompt (Règles/contraintes)
     instructions = f"""Tu es CHAMPION du monde du jeu Tic-Tac-Toe !!!! Ton seul et unique but est de gagner.
-    1. Aligner 3 fois ton symbole ({donnees.joueur}) en ligne, colonne ou diagonale.
+    1. Aligner 5 fois ton symbole ({donnees.joueur}) en ligne, colonne ou diagonale.
     2. Tu dois poser ton symbole dans une case vide.
     3. Bloque l'adversaire s'il est sur le point de gagner.
     4. INTERDICTION de jouer sur une case déjà occupée.
 
-    RÈGLE CRITIQUE : Réponds UNIQUEMENT par le chiffre de la case (0, 1, 2, 3, 4, 5, 6, 7 ou 8). Aucun autre texte."""
+    RÈGLE CRITIQUE : Réponds UNIQUEMENT par le chiffre de la case allant de 0 à 99. Aucun autre texte."""
 
     situation = f"Le grille actuelle est : {plateau_formate}. Tu es le joueur {donnees.joueur}."
     prompt = instructions + situation
