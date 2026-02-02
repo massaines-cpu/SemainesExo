@@ -69,6 +69,7 @@ class Triangle:
 
     def perim(self):
         return self.a.dist(self.b) + self.b.dist(self.c) + self.c.dist(self.a)
+
     def aire(self):
         B = self.a.dist(self.b)
         d = Point(self.c.x, self.a.y)
