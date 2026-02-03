@@ -2,9 +2,11 @@ import turtle
 import turtle as t
 import math
 from turtle import *
-from fonction import Triangle
+from fonction import triangle
+screen = t.Screen()
+screen.setup(width=1.0, height=1.0)
 
-p = Triangle(80, 100, 54)
+triangle((10,10), (50,50),(22,77))
 
 
 while True:
