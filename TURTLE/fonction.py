@@ -85,14 +85,31 @@ def Visage_pointu(a,b):
     forward(a / 2)
 
 
+# def triangle(a, b, c, tortue: Turtle):
+#     tortue.penup()
+#     tortue.goto(a)
+#     tortue.pendown()
+#     tortue.goto(b)
+#     tortue.goto(c)
+#     tortue.goto(a)
 
-def triangle(a, b, c):
-        penup()
-        goto(a)
-        pendown()
-        goto(b)
-        goto(c)
-        goto(a)
+
+def triangle(a, e):
+    f = (180 - e) / 2
+    h = (a / 2) / (math.sin(math.radians(e / 2)))
+    forward(a)
+    left(180 - f)
+    forward(h)
+    left(180 - e)
+    forward(h)
+
+    # forward(a)
+    # right((180 - e)/2)
+    # h = (a/2)/(math.sin(math.radians(e/2)))
+    # forward(h)
+    # left(180-e)
+    # forward(h)
+    # right((180 - e)/2)
 
 def Rectangle2(l, L):
     for ligne in range(3):
@@ -127,6 +144,7 @@ def Frame(c):
         shape(circle(c/10, 180))
         shape(circle(c/10, 90))
 
+
 def Hexagone2(c):
     for ligne in range(3):
         for colonne in range(4):
@@ -153,6 +171,7 @@ class Maison:
         self.porte = porte
         self.toit = toit
 
+
 class Mur:
     def __init__(self, l, L):
         self.l = l
@@ -171,82 +190,263 @@ class Fenetre:
     def __init__(self, l, L):
         self.l = l
         self.L = L
-    def dessin(self, appel_mur):
+    def dessin(self, mur):
         Rectangle(self.l, self.L)
         up()
-        forward(appel_mur.l/2)
+        forward(mur.l/2)
         down()
         left(90)
         forward(self.L * 3.5)
         left(90)
+        pass
 
 class Porte:
     def __init__(self, l, L):
         self.l = l
         self.L = L
-    def dessin(self):
+    def dessin(self, mur, fenetre):
         Rectangle(self.l, self.L)
+        left(90)
+        up()
+        forward(mur.l)
+        down()
+        right(90)
+        backward((fenetre.L * 3.5)+ mur.L * (1 / 7))
+        pass
 
 
 class Toit:
-    def __init__(self, a, b, c):
+    def __init__(self, a, e):
         self.a = a
-        self.b = b
-        self.c = c
+        self.e = e
 
     def dessin(self):
-        triangle(self.a, self.b, self.c)
+        triangle(self.a, self.e)
+        home()
+        left(90)
+        left(90)
+        up()
+        forward(100)
+        left(90)
+        forward(50)
+        right(90)
+        right(90)
+        right(90)
+        down()
+
+        # T
+        # right(90)
+        # left(90)
+        forward(100)
+        backward(50)
+        right(90)
+        forward(100)
+        left(90)
+        up()
+        forward(70)
+        down()
+
+        left(90)
+        forward(100)
+        backward(50)
+        right(90)
+        forward(50)
+        left(90)
+        forward(50)
+        backward(100)
+        right(90)
+        up()
+        forward(30)
+        down()
+
+        # E
+        forward(50)
+        backward(50)
+        left(90)
+        forward(100)
+        backward(50)
+        right(90)
+        forward(40)
+        backward(40)
+        left(90)
+        forward(50)
+        right(90)
+        forward(50)
+        up()
+        right(90)
+        forward(100)
+        left(90)
+        forward(70)
+        down()
+
+        # 0
+        shape(circle(50, 360))
+        up()
+        forward(70)
+        down()
+        # D
+        left(90)
+        forward(100)
+        right(90)
+        circle(-50, 180)
+        up()
+        left(90)
+        left(90)
+        forward(100)
+        down()
+        # O
+        shape(circle(50, 360))
+        up()
+        forward(70)
+        down()
+        # R
+        left(90)
+        forward(100)
+        right(90)
+        circle(-30, 180)
+        left(135)
+        forward(70)
+        left(45)
+        up()
+        forward(20)
+        down()
+        # A
+        left(75)
+        forward(105)
+        right(150)
+        forward(105)
+        backward(45)
+        right(105)
+        forward(30)
+        up()
+
+
+def theodora(self):
+    # left(90)
+    # up()
+    # forward(50)
+    # down()
+    #T
+    right(90)
+    left(90)
+    forward(100)
+    backward(50)
+    right(90)
+    forward(100)
+    left(90)
+    up()
+    forward(70)
+    down()
+
+    left(90)
+    forward(100)
+    backward(50)
+    right(90)
+    forward(50)
+    left(90)
+    forward(50)
+    backward(100)
+    right(90)
+    up()
+    forward(30)
+    down()
+
+    #E
+    forward(50)
+    backward(50)
+    left(90)
+    forward(100)
+    backward(50)
+    right(90)
+    forward(40)
+    backward(40)
+    left(90)
+    forward(50)
+    right(90)
+    forward(50)
+    up()
+    right(90)
+    forward(100)
+    left(90)
+    forward(70)
+    down()
+
+    #0
+    shape(circle(50, 360))
+    up()
+    forward(70)
+    down()
+    #D
+    left(90)
+    forward(100)
+    right(90)
+    circle(-50, 180)
+    up()
+    left(90)
+    left(90)
+    forward(100)
+    down()
+    #O
+    shape(circle(50, 360))
+    up()
+    forward(70)
+    down()
+    #R
+    left(90)
+    forward(100)
+    right(90)
+    circle(-30, 180)
+    left(135)
+    forward(70)
+    left(45)
+    up()
+    forward(20)
+    down()
+    #A
+    left(75)
+    forward(105)
+    right(150)
+    forward(105)
+    backward(45)
+    right(105)
+    forward(30)
+    up()
 
 
 
 
+def apple(taille):
+    up()
+    goto(0, -taille)
+    setheading(0)
+    down()
+
+    # circle(taille * 0.7, 50)
+    # left(120)
+    right(90)
+    right(90)
+    right(20)
+    circle(-taille * 0.2, 140)
+    left(110)
+    circle(taille*0.3, 80)
+    right(70)
+    circle(taille *0.3, 100)
+    right(2)
+    circle(taille * 0.4, 110)
+    right(5)
+    circle(taille * 0.1, 98)
+    left(120)
+    left(110)
+    circle(taille * 0.3, 119)
+    right(5)
+    circle(taille * 0.1, 70)
 
 
-# class Maison:
-#     def __init__(self, mur, fenetre, porte, toit):
-#         self.mur = mur
-#         self.fenetre = fenetre
-#         self.porte = porte
-#         self.toit = toit
-#         pass
-#
-# class Mur:
-#     def __init__(self, l, L):
-#         self.l = l
-#         self.L = L
-#
-#     def dessiner_mur(self):
-#         Rectangle(self.l, self.L)
-#         left(90)
-#         left(90)
-#         forward(self.l / 2)
-#         right(90)
-#         up()
-#         forward(self.L * (1 / 7))
-#         down()
-#
-# class Fenetre:
-#     def __init__(self, l, L):
-#         self.l = l
-#         self.L = L
-#
-#     def dessiner_fenetre(self):
-#         Rectangle(self.l, self.L)
-#         up()
-#         forward(self.mur.l)
-#         down()
-#
-# class Porte:
-#     def __init__(self, l, L):
-#         self.l = l
-#         self.L = L
-#     def dessiner_porte(self):
-#         Rectangle(self.l, self.L)
-#
-# class Toit:
-#     def __init__(self, a, b, c):
-#         self.a = a
-#         self.b = b
-#         self.c = c
-#     def dessiner_porte(self):
-#         triangle(self.a, self.b, self.c)
+    #feuille
+    # up()
+    # goto(taille * 0.1, taille * 0.8)
+    # setheading(45)
+    # down()
+    # circle(taille * 0.4, 90)
+    # left(90)
+    # circle(taille * 0.4, 90)

@@ -2,12 +2,11 @@ import turtle
 import turtle as t
 import math
 from turtle import *
-from fonction import triangle
+from fonction import apple
 screen = t.Screen()
 screen.setup(width=1.0, height=1.0)
 
-triangle(200, 80)
-
+a= apple(150)
 
 while True:
     pass
