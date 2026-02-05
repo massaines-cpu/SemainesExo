@@ -8,5 +8,6 @@ screen.setup(width=1.0, height=1.0)
 
 a= apple(150)
 
+
 while True:
     pass
