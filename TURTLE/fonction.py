@@ -433,7 +433,7 @@ class Toit:
         right(90)
         forward(50)
         up()
-        forward(30)  
+        forward(30)
         down()
         left(90)
 
@@ -487,99 +487,15 @@ class Toit:
         forward(115)
 
 
-# def theodora(self):
-#     # left(90)
-#     # up()
-#     # forward(50)
-#     # down()
-#     #T
-#     right(90)
-#     left(90)
-#     forward(100)
-#     backward(50)
-#     right(90)
-#     forward(100)
-#     left(90)
-#     up()
-#     forward(70)
-#     down()
-#
-#     left(90)
-#     forward(100)
-#     backward(50)
-#     right(90)
-#     forward(50)
-#     left(90)
-#     forward(50)
-#     backward(100)
-#     right(90)
-#     up()
-#     forward(30)
-#     down()
-#
-#     #E
-#     forward(50)
-#     backward(50)
-#     left(90)
-#     forward(100)
-#     backward(50)
-#     right(90)
-#     forward(40)
-#     backward(40)
-#     left(90)
-#     forward(50)
-#     right(90)
-#     forward(50)
-#     up()
-#     right(90)
-#     forward(100)
-#     left(90)
-#     forward(70)
-#     down()
+def chef_doeuvre(c):
+    Hexagone2(50)
+    Frame(70)
+    apple(150)
+    Rectangle2(50, 90)
+    Visage_pointu(50, 80)
+    Visage_neutre(150, 80)
+    Pilule(60, 10)
 
-    #0
 
-    # shape(circle(50, 360))
-    # up()
-    # forward(70)
-    # down()
-    # #D
-    # left(90)
-    # forward(100)
-    # right(90)
-    # circle(-50, 180)
-    # up()
-    # left(90)
-    # left(90)
-    # forward(100)
-    # down()
-    # #O
-    #
-    # # shape(circle(50, 360))
-    # # up()
-    # # forward(70)
-    # # down()
-    # #R
-    # left(90)
-    # forward(100)
-    # right(90)
-    # circle(-30, 180)
-    # left(135)
-    # forward(70)
-    # left(45)
-    # up()
-    # forward(20)
-    # down()
-    # #A
-    # left(75)
-    # forward(105)
-    # right(150)
-    # forward(105)
-    # backward(45)
-    # right(105)
-    # forward(30)
-    # up()
-    #
-    #
 
 
