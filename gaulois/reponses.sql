@@ -118,12 +118,31 @@ JOIN province p ON v.numprovince = p.numprovince
 GROUP BY p.nomprovince;
 
 SELECT "Nombre de potions différentes absorbées par chaque habitant (nom et nombre)" as "Question 26";
-SELECT p.numpotion, h.numhab, h.nom FROM habitant h
-JOIN absorber a ON a.numhab = h.numhab
+SELECT COUNT(a.numpotion), h.nom FROM absorber a
+JOIN habitant h ON a.numhab = h.numhab
 JOIN potion p ON p.numpotion = a.numpotion
-GROUP BY h.numhab;
+GROUP BY h.nom;
 
 
---hutte trier dans l'ordre et prendre que le premier'
+SELECT "Nom des habitants ayant bu plus de 2 louches de potion zen" as "Question 27";
+SELECT h.nom FROM absorber a
+JOIN habitant h ON a.numhab = h.numhab
+JOIN potion p ON a.numpotion = p.numpotion AND p.libpotion = 'Potion Zen' WHERE a.quantite > 2
+GROUP BY h.nom;
+
+SELECT "Noms des villages dans lesquels on trouve une resserre" as "Question 28";
+SELECT v.nomvillage FROM resserre r
+JOIN village v ON v.numvillage = r.numvillage
+WHERE r.numresserre IS NOT NULL;
+
+SELECT "Nom du village contenant le plus grand nombre de huttes" as "Question 29";
+SELECT v.nomvillage FROM village v
+WHERE v.nbhuttes = (SELECT MAX(v.nbhuttes) FROM village v);
+
+SELECT "Noms des habitants ayant pris plus de trophées qu'Obélix" as "Question 30";
+SELECT h.Nom, COUNT(*) FROM trophee t
+JOIN habitant h ON h.NumHab = t.NumPreneur
+GROUP BY h.NumHab, h.Nom
+HAVING COUNT(*) > (SELECT COUNT(*) FROM trophee t JOIN habitant h ON h.NumHab = t.NumPreneur WHERE h.Nom = 'Obélix');
 
 
